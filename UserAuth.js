@@ -9,7 +9,8 @@ export default new Vuex.Store({
         user: AuthService.getUser()
     },
     getters: {
-        user:state => state.user
+        user:state => state.user,
+        isAuthen:() => {return AuthService.isAuthen()}
     },
     mutations: {
         update(state){
