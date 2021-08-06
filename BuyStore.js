@@ -8,15 +8,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userAccounting: BuyManage.getAccOnCreate(),
-    orders: new Map(),
-    buyErr: ""
+    orders: new Map()
   },
   mutations: {
     async update(state) {
       state.userAccounting = BuyManage.getAccounting()
     },
     addOrder(state, { good, amount }) {
-      console.log(good)
       state.orders.set(good.id, { good, amount })
     },
     deleteOrder(state, id) {
@@ -25,8 +23,7 @@ export default new Vuex.Store({
   },
   getters: {
     userAccounting: state => state.userAccounting,
-    orders: state => Array.from(state.orders.values()),
-    buyErr: state => state.buyErr
+    orders: state => Array.from(state.orders.values())
   }
   ,
   actions: {
@@ -58,8 +55,8 @@ export default new Vuex.Store({
       }
       else return "Amount is over"
     },
-    editOrder({ commit }, { id, good, amount }) {
-      return this.addOrder({ commit }, { id, good, amount })
+    editOrder({ commit }, { good, amount }) {
+      return this.addOrder({ commit }, { good, amount })
     },
     deleteOrder({ commit }, { id }) {
       commit('deleteOrder', id)
