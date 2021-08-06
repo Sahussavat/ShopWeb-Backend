@@ -90,13 +90,54 @@ BuyStore.dispatch('buy',{orders: [
   cost: ราคา,
   cost_type: "coins/points",
   detail: "bruh",
-  pic: ""
+  pic: "",
+  amount: int amount
 }
 ]})
 
 จะทำงานได้เมื่อ login แล้ว
 ```
-*ฟังชั่น buy สามารถเรียก text error ได้โดยการเติมส่วนนี้ลงด้านหลังฟังชั่น*
+- **increaseCoins** 
+```
+ใช้ในการเพิ่ม coins
+
+การใช้ให้ส่ง parameter ดังนี้ 
+
+BuyStore.dispatch('buy',{amount: int amount})
+
+จะทำงานได้เมื่อ login แล้ว
+```
+
+- **addOrder** 
+```
+ใช้ในการเพิ่ม/แก้ไข Order 1 ชิ้น
+
+การใช้ให้ส่ง parameter ดังนี้
+
+BuyStore.dispatch('addOrder',{ good:{
+  //aka array ของข้อมูลสินค้าที่เรียกซื้อ
+  goodName:"goodName",
+  cost: ราคา,
+  cost_type: "coins/points",
+  detail: "bruh",
+  pic: "",
+  amount: int amount
+}, amount: int amount //จำนวนที่จะซื้อ })
+```
+- **editOrder** 
+```
+การใช้งานเหมือนฟังชัน addOrder ทุกประการ เพียงแต่เปลี่ยนชื่อฟังชันให้มันเข้ากับบริบทเฉยๆ
+```
+- **deleteOrder** 
+```
+ใช้ในการลบ Order 1 ชิ้น
+
+การใช้ให้ส่ง parameter ดังนี้
+
+BuyStore.dispatch('deleteOrder', {id: "id" //ไอดีสินค้า})
+```
+
+*ฟังชั่น buy, addOrder, editOrder และ amount สามารถเรียก text error ได้โดยการเติมส่วนนี้ลงด้านหลังฟังชั่น*
 ```
 .then((err)=>{
    // โค้ดสำหรับทำงานกับตัวแปร err (error)
