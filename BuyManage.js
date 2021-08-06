@@ -85,11 +85,7 @@ export default {
                         coins: acc.coins - coins,
                         points: acc.points - points
                     }
-                    return await axios.put('http://localhost:1337' + '/accountings/' + acc.id, newBody,{
-                        headers: {
-                            Authorization: 'Bearer ' + AuthService.getJWT()
-                        }
-                    })
+                    return await axios.put('http://localhost:1337' + '/accountings/' + acc.id, newBody,this.headers())
                         .catch((e) => {
                             if (e.response.status === 400)
                                 return e.response.data.message[0].messages[0].message
@@ -99,7 +95,9 @@ export default {
                             }
                         })
                 }
-                else return "Not have enough coin nor point"
+                else {
+                    return "Not have enough coin nor point"
+                }
             }
             else return err
 
@@ -112,6 +110,7 @@ export default {
         let coins = 0
         let points = 0
         let err = ""
+        console.log(orders)
         for (let i = 0; i < orders.length; i++) {
             if(orders[i].amount > orders[i].good.amount){
                 err = "Amount is over"
@@ -134,6 +133,31 @@ export default {
             if(good.amount >= orders[i].amount){
                 good.amount -= orders[i].amount
                 await GoodManage.updateGood(good.id, good)
+            }
+        }
+    },
+    async increaseCoins(coins){
+        let {acc,err} = await this.getAccOnCreate()
+        if(coins < 0) err = "The amount of coins must be positive number."
+        if(!err){
+            let newBody = acc
+            newBody.coins += coins 
+            await axios.put('http://localhost:1337'+'/accountings/'+acc.id,newBody,this.headers())
+            .catch((e) => {
+                if (e.response.status === 400)
+                    return e.response.data.message[0].messages[0].message
+                else {
+                    console.error(e)
+                    return "Unknow error status: " + e.response.status
+                }
+            })
+        }
+        return err
+    },
+    headers(){
+        return {
+            headers: {
+                Authorization: 'Bearer ' + AuthService.getJWT()
             }
         }
     }
