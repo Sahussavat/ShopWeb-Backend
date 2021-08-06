@@ -103,7 +103,7 @@ BuyStore.dispatch('buy',{orders: [
 
 การใช้ให้ส่ง parameter ดังนี้ 
 
-BuyStore.dispatch('buy',{amount: int amount})
+BuyStore.dispatch('increaseCoins',{amount: int amount})
 
 จะทำงานได้เมื่อ login แล้ว
 ```
