@@ -22,8 +22,8 @@ export default new Vuex.Store({
         rewardGood: state => state.rewardGood
     },
     actions: {
-        async addGood({ commit }, {goodName, cost, cost_type, detail, pic}) {
-            let err = await GoodManage.addGood(goodName, cost, cost_type, detail, pic)
+        async addGood({ commit }, {goodName, cost, cost_type, detail, pic, amount}) {
+            let err = await GoodManage.addGood(goodName, cost, cost_type, detail, pic, amount)
             await commit('update')
             return err
         },

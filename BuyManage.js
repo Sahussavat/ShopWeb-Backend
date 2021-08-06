@@ -1,6 +1,7 @@
 
 import AuthService from "./AuthService"
 import axios from 'axios'
+import GoodManage from './GoodManage'
 
 export default {
     async getAccOnCreate(){
@@ -10,12 +11,10 @@ export default {
         }
         if(AuthService.getUser()){
             data = await this.getAccounting()
-            if(data.acc.length == 0){
+            if(!data.acc){
                 data = await this.createAccounting();    
             }
-            data.acc = data.acc[0] 
         }
-        console.log(data)
         return data
     },
     async getAccounting() {
@@ -29,7 +28,7 @@ export default {
                 })
                 .then((res) => {
                     if (res.status == 200) {
-                        return { acc: res.data, err: "" }
+                        return { acc: res.data[0], err: "" }
                     } else {
                         return { acc: {}, err: "" }
                     }
@@ -44,15 +43,6 @@ export default {
                 })
         }
         else return { acc: {}, err: "Cannot get accounting, please login" }
-    },
-    getTotalCost(orders) {
-        let coins = 0
-        let points = 0
-        for (let i = 0; i < orders.length; i++) {
-            coins += orders[i].coins
-            points += orders[i].points
-        }
-        return { coins, points }
     },
     async createAccounting() {
         let user = AuthService.getUser();
@@ -84,29 +74,67 @@ export default {
         else return { acc: {}, err: "Cannot get accounting, please login" }
     },
     async buy(orders) {
-        let { acc, err } = await this.getAccounting()
+        let { acc, err } = await this.getAccOnCreate()
         if (!err) {
-            let { coins, points } = getTotalCost(orders)
-            if (acc.coins >= coins && acc.points >= points) {
-                let newBody = {
-                    email: acc.email,
-                    coins: acc.coins - coins,
-                    points: acc.points - points
-                }
-                return await axios.put('http://localhost:1337' + '/accounting/' + acc.id, newBody, headers())
-                    .catch((e) => {
-                        if (e.response.status === 400)
-                            return e.response.data.message[0].messages[0].message
-                        else {
-                            console.error(e)
-                            return "Unknow error status: " + e.response.status
+            let { coins, points, err } = this.getTotalCost(orders)
+            if(err == ""){
+                if (acc.coins >= coins && acc.points >= points) {
+                    this.decreaseGoodAmount(orders)
+                    let newBody = {
+                        email: acc.email,
+                        coins: acc.coins - coins,
+                        points: acc.points - points
+                    }
+                    return await axios.put('http://localhost:1337' + '/accountings/' + acc.id, newBody,{
+                        headers: {
+                            Authorization: 'Bearer ' + AuthService.getJWT()
                         }
                     })
+                        .catch((e) => {
+                            if (e.response.status === 400)
+                                return e.response.data.message[0].messages[0].message
+                            else {
+                                console.error(e)
+                                return "Unknow error status: " + e.response.status
+                            }
+                        })
+                }
+                else return "Not have enough coin nor point"
             }
-            else return "Not have enough coin nor point"
+            else return err
+
         }
         else {
             return err
+        }
+    },
+    getTotalCost(orders) {
+        let coins = 0
+        let points = 0
+        let err = ""
+        for (let i = 0; i < orders.length; i++) {
+            if(orders[i].amount > orders[i].good.amount){
+                err = "Amount is over"
+                break;
+            }
+            switch(orders[i].good.cost_type){
+                case "coins":
+                    coins += orders[i].good.cost
+                    break;
+                case "points":
+                    points += orders[i].good.cost
+                    break;
+            }
+        }
+        return { coins, points, err }
+    },
+    async decreaseGoodAmount(orders){
+        for (let i = 0; i < orders.length; i++) {
+            let good = orders[i].good
+            if(good.amount >= orders[i].amount){
+                good.amount -= orders[i].amount
+                await GoodManage.updateGood(good.id, good)
+            }
         }
     }
 }

@@ -13,8 +13,6 @@ export default {
             (res) => {
                 if(res.status == 200){
                     localStorage.setItem(auth_key ,JSON.stringify(res.data))
-                    console.log(res.data)
-                    console.log(this.getUser())
                 }else{
                     console.log(res.message)
                 }

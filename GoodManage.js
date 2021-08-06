@@ -24,13 +24,14 @@ export default {
                 return "Unknow error status: " + e.response.status
             })
     },
-    async addGood(goodName, cost, cost_type, detail, pic) {
+    async addGood(goodName, cost, cost_type, detail, pic, amount) {
         return await axios.post('http://localhost:1337' + '/goods', {
             goodName: goodName,
             cost: cost,
             cost_type: cost_type,
             detail: detail,
-            pic: pic
+            pic: pic,
+            amount: amount
         }, headers()
         ).catch((e) => {
             if (e.response.status === 400 || e.response.status === 500 )
