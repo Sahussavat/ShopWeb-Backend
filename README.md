@@ -160,7 +160,7 @@ BuyStore.dispatch('deleteOrder', {id: "id" //ไอดีสินค้า})
 **หมายเหตุ getters ตัวนี้มีการเรียกแตกต่างจากตัวอื่น ต้องเรียกผ่าน then เท่านั้น
 โดยเรียกได้ดังนี้
 
-.then(({acc, err})=>{
+BuyStore.getters.userAccounting.then(({acc, err})=>{
   //ส่วน code ที่ทำงานกับ acc และ err
 })
 
