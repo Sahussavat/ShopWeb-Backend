@@ -36,7 +36,8 @@ export default {
         const user = {
             username: auth ? auth.user.username : "",
             email: auth ? auth.user.email : "",
-            jwt: auth ? auth.jwt : ""
+            jwt: auth ? auth.jwt : "",
+            role: auth ? auth.user.role.name : ""
         }
         return user
     },

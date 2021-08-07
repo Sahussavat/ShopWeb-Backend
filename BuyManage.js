@@ -2,6 +2,8 @@
 import AuthService from "./AuthService"
 import axios from 'axios'
 import GoodManage from './GoodManage'
+import HistoryManage from './HistoryManage'
+import PointsManage from "./PointsManage"
 
 export default {
     async getAccOnCreate(){
@@ -80,6 +82,7 @@ export default {
             if(err == ""){
                 if (acc.coins >= coins && acc.points >= points) {
                     this.decreaseGoodAmount(orders)
+                    PointsManage.increaseCondition(coins)
                     let newBody = {
                         email: acc.email,
                         coins: acc.coins - coins,
@@ -110,7 +113,6 @@ export default {
         let coins = 0
         let points = 0
         let err = ""
-        console.log(orders)
         for (let i = 0; i < orders.length; i++) {
             if(orders[i].amount > orders[i].good.amount){
                 err = "Amount is over"
@@ -121,6 +123,7 @@ export default {
                     coins += orders[i].good.cost
                     break;
                 case "points":
+                    HistoryManage.savingPointHis("trade", orders[i].good.goodName, AuthService.getUser().username)
                     points += orders[i].good.cost
                     break;
             }
