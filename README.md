@@ -236,3 +236,69 @@ GoodStore.dispatch('updateGood',{id:"id" ,{
 ```
 ข้อมูลเป็น Array ของสินค้าประเภทรางวัล(ใช้ points ในการซื้อ)ที่ดึงมาจาก database
 ```
+# PointsHistoryStore.js
+**การใช้ฟังชั่น**
+: (ต้อง login ก่อนจึงจะใช้งานได้) ให้ใช้ผ่าน GoodStore.dispatch()
+
+**การใช้ getters**
+: ให้ใช้ผ่าน GoodStore.getters.(ตัวแปร)
+**ฟังชั่นประกอบด้วย:**
+- **searchReceiveHistory** 
+```
+ใช้ในการค้นข้อมูลการรับแต้มในช่วงเวลาที่กำหนด
+สามารถใช้ได้โดยการ
+
+GoodStore.dispatch('searchReceiveHistory',{
+   dateStart: new Date('2021/08/07'), //จุดเริ่มต้น ให้ส่งเป็น format years/mm/dd 
+   dateEnd: new Date('2021/08/15') //จุดสิ้นสุด ให้ส่งเป็น format years/mm/dd
+})
+
+ต้อง login ในฐานะ admin เท่านั้นจึงจะใช้ได้
+```
+- **searchTradeHistory** 
+```
+ใช้ในการค้นข้อมูลการแลกแต้มในช่วงเวลาที่กำหนด
+สามารถใช้ได้โดยการ
+
+GoodStore.dispatch('searchReceiveHistory',{
+   dateStart: new Date('2021/08/07'), //จุดเริ่มต้น ให้ส่งเป็น format years/mm/dd 
+   dateEnd: new Date('2021/08/15') //จุดสิ้นสุด ให้ส่งเป็น format years/mm/dd
+})
+
+ต้อง login ในฐานะ admin เท่านั้นจึงจะใช้ได้
+```
+- **searchTradeHistory** 
+```
+ใช้ในการอัพเดตตัวประวัติการใช้และรับแต้มของผู้ใช้
+สามารถใช้ได้โดยการ
+
+GoodStore.dispatch('updateAllHistory')
+```
+**Getters ประกอบด้วย:**
+- **receiveHistory** 
+```
+ข้อมูลเป็น Array ของประวัติการรับแต้มในช่วงเวลาที่กำหนด แต่ละ element จะมีหน้าตาดังนี้
+{
+  dateEvents: "", //String วันที่ ระบุในรูปของ years/mm/dd เช่น 2021/12/31
+  eventType: "", //ประเภทประวัติเป็น  "receive" (รับ)
+  eventsText: "", //detail ประวัติการรับแต้ม
+  email: "" //email ของผู้ใช้ที่เกี่ยวข้องกับประวัตินี้
+}
+```
+- **tradeHistory** 
+```
+ข้อมูลเป็น Array ของประวัติการแลกแต้มในช่วงเวลาที่กำหนด แต่ละ element จะมีหน้าตาดังนี้
+{
+  dateEvents: "", //String วันที่ ระบุในรูปของ years/mm/dd เช่น 2021/12/31
+  eventType: "", //ประเภทประวัติ มี "trade" (แลก)
+  eventsText: "", //detail ประวัติการแลกแต้ม
+  email: "" //email ของผู้ใช้ที่เกี่ยวข้องกับประวัตินี้
+}
+```
+- **allHistory** 
+```
+ข้อมูลเป็น Array ของประวัติการแลกและรับแต้มของผู้ใช้ที่เข้าระบบ 
+
+(ลักษณะ element เช่นเดียวกับสองตัวก่อน 
+แต่เป็นการรวมทั้งสองตัวเข้าด้วยกันและเกี่ยวกับผู้ใช้คนเดียวเท่านั้น)
+```
