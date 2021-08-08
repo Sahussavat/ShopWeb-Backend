@@ -31,12 +31,13 @@ export default {
     },
     getSortedPriority(arr){
         let mapCount = new Map()
+        console.log(arr)
         for(let i=0;i<arr.length;i++){
-            let dateData = mapCount.get(arr[i].eventsText);
+            let dateData = mapCount.get(arr[i].email);
             if(!dateData){
-                mapCount.set(arr[i].eventsText, {data: arr[i], amount:1});
+                mapCount.set(arr[i].email, {data: arr[i], amount:arr[i].points});
             }else{
-                mapCount.set(arr[i].eventsText, {data: dateData.data, amount: dateData.amount + 1});
+                mapCount.set(arr[i].email, {data: dateData.data, amount: dateData.amount + arr[i].points});
             }
         }
         let dataSortingArr = Array.from(mapCount.values())
@@ -81,7 +82,8 @@ export default {
                 +(dateNow.getDate() < 10 ? "0"+dateNow.getDate():dateNow.getDate()),
                 eventType: type,
                 eventsText: detail,
-                email: AuthService.getUser().email
+                email: AuthService.getUser().email,
+                points: points
             }
             return axios.post("http://localhost:1337" + "/histories", newBody, headers())
                 .then(() => { return { data: {}, err: "" } })
