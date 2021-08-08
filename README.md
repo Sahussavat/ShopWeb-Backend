@@ -83,17 +83,7 @@ UserAuth.dispatch('logout')
 
 การใช้ให้ส่ง parameter ดังนี้ 
 
-BuyStore.dispatch('buy',{orders: [
-{
-  //aka array ของข้อมูลสินค้าที่เรียกซื้อ
-  goodName:"goodName",
-  cost: ราคา,
-  cost_type: "coins/points",
-  detail: "bruh",
-  pic: "",
-  amount: int amount
-}
-]})
+BuyStore.dispatch('buy')
 
 จะทำงานได้เมื่อ login แล้ว
 ```
