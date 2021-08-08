@@ -155,13 +155,19 @@ BuyStore.getters.userAccounting.then(({acc, err})=>{
 })
 
 ```
-- **orders** 
+- **ordersArr** 
 ```
-ข้อมูลรายการสินค้าที่ได้ลิสต์เอาไว้ ข้อมูลจะอยู่ในรูปของ Array มีลักษณะดังนี้
+ข้อมูลรายการสินค้าที่ได้ลิสต์เอาไว้ ข้อมูลจะอยู่ในรูปของ Array ใน json มีลักษณะดังนี้
 
 #good aka ข้อมูลสินค้า
-[{good1},{good2},{good3}]
-
+{
+  data:[
+   {good1},{good2},{good3}
+  ]
+}
+การเรียก Array ใน data ให้เขียนตัวแปรดังนี้
+this.variable = BuyStore.getters.ordersArr //เขียนเช่นนี้เพื่อให้ this.variable reference ไปหา ordersArr ใน store
+เมื่อต้องการจะเรียกใช้ Array ให้ระบุตัวแปรคือ this.variable.data //ข้อมูลข้างใน data จะเป็น array 
 ```
 # GoodStore.js
 **การใช้ฟังชั่น**
