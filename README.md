@@ -285,11 +285,15 @@ GoodStore.dispatch('updateAllHistory')
 ```
 ข้อมูลเป็น Array ของประวัติการแลกแต้มในช่วงเวลาที่กำหนด แต่ละ element จะมีหน้าตาดังนี้
 {
+ amount: int amount, //points รวม
+ data:{
   dateEvents: "", //String วันที่ ระบุในรูปของ years-mm-dd เช่น 2021-12-31
   eventType: "", //ประเภทประวัติ มี "trade" (แลก)
   eventsText: "", //detail ประวัติการแลกแต้ม
   email: "" //email ของผู้ใช้ที่เกี่ยวข้องกับประวัตินี้
+ }
 }
+
 ```
 - **allHistory** 
 ```
